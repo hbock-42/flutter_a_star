@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_a_start/models/board.dart';
 import 'package:flutter_a_start/models/board_tile.dart';
@@ -9,13 +11,20 @@ class BoardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var tileWidth = size.width / board.lines?.first?.length;
+    var tileHeight = size.height / board.lines?.length;
+    var tileSize = min(tileWidth, tileHeight);
     return Container(
-      child: buildBoard(),
+      padding: MediaQuery.of(context).padding,
+      child: buildBoard(tileSize),
     );
   }
 
-  Widget buildTile(BoardTile boardTile) {
+  Widget buildTile(BoardTile boardTile, double tileSize) {
     return Container(
+      width: tileSize,
+      height: tileSize,
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(
@@ -31,16 +40,15 @@ class BoardWidget extends StatelessWidget {
     );
   }
 
-  Widget buildRow(List<BoardTile> row) {
+  Widget buildRow(List<BoardTile> row, double tileSize) {
     List<Widget> tiles = List<Widget>();
-    row.forEach(
-        (boardTile) => tiles.add(Expanded(child: buildTile(boardTile))));
-    return Row(children: tiles);
+    row.forEach((boardTile) => tiles.add(buildTile(boardTile, tileSize)));
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: tiles);
   }
 
-  Widget buildBoard() {
+  Widget buildBoard(double tileSize) {
     List<Widget> rows = List<Widget>();
-    board.lines.forEach((row) => rows.add(Expanded(child: buildRow(row))));
-    return Column(children: rows);
+    board.lines.forEach((row) => rows.add(buildRow(row, tileSize)));
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: rows);
   }
 }
