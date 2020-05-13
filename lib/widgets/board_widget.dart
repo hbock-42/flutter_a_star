@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_a_start/helpers/a_star.dart';
 import 'package:flutter_a_start/models/board.dart';
 import 'package:flutter_a_start/models/board_tile.dart';
 
@@ -16,6 +17,7 @@ class BoardWidget extends StatefulWidget {
 class _BoardWidgetState extends State<BoardWidget> {
   BoardTile start;
   BoardTile end;
+  List<Point> path = List<Point>();
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,8 @@ class _BoardWidgetState extends State<BoardWidget> {
       tileColor = Colors.green;
     } else if (boardTile == end) {
       tileColor = Colors.red;
+    } else if (path.contains(boardTile.position)) {
+      tileColor = Colors.blue;
     }
     return GestureDetector(
       onTap: () {
@@ -43,6 +47,11 @@ class _BoardWidgetState extends State<BoardWidget> {
           setState(() => start = boardTile);
         } else {
           setState(() => end = boardTile);
+          var astar = AStar(
+              board: widget.board, start: start.position, end: end.position);
+          path = astar.calculatePath();
+          start = null;
+          end = null;
         }
       },
       child: Container(

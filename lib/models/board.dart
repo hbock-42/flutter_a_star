@@ -4,6 +4,8 @@ import 'board_tile.dart';
 
 class Board {
   List<List<BoardTile>> lines;
+  int get width => lines.first.length;
+  int get height => lines.length;
 
   Board(this.lines);
 
