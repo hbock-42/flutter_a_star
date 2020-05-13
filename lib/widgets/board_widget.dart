@@ -44,7 +44,10 @@ class _BoardWidgetState extends State<BoardWidget> {
     return GestureDetector(
       onTap: () {
         if (start == null) {
-          setState(() => start = boardTile);
+          setState(() {
+            start = boardTile;
+            path = List<Point>();
+          });
         } else {
           setState(() {
             end = boardTile;
@@ -53,7 +56,7 @@ class _BoardWidgetState extends State<BoardWidget> {
             path = astar.calculatePath();
             print("path len = " + path.length.toString());
             start = null;
-            end = null;
+            // end = null;
           });
         }
       },
