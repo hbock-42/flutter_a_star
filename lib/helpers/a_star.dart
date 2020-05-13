@@ -14,6 +14,8 @@ class AStar {
   AStar({@required this.board, @required this.start, @required this.end});
 
   List<Point> calculatePath() {
+    print("start:$start");
+    print("end:$end");
     rand = Random.secure();
     Set<Point> openSet = Set<Point>();
     openSet.add(start);
@@ -28,11 +30,13 @@ class AStar {
 
     while (openSet.length > 0) {
       Point<num> current = getPointWithLowestFscore(openSet, fScores);
+      print(cameFrom);
       if (current == end) {
         return _reconstructPath(cameFrom, current);
       }
       openSet.remove(current);
       List<Point> neighbors = _getNeighbors(current);
+      print("neigbors: " + neighbors.toString());
       for (var neighbor in neighbors) {
         var tentativeGScore = gScores[current] + 1;
         if (!gScores.containsKey(neighbor)) {
@@ -54,9 +58,9 @@ class AStar {
   List<Point> _getNeighbors(Point current) {
     var possibleNeighbors = List<Point>();
     possibleNeighbors.add(current + Point(0, -1));
-    possibleNeighbors.add(Point(0, 1));
-    possibleNeighbors.add(Point(-1, 0));
-    possibleNeighbors.add(Point(1, 0));
+    possibleNeighbors.add(current + Point(0, 1));
+    possibleNeighbors.add(current + Point(-1, 0));
+    possibleNeighbors.add(current + Point(1, 0));
     var neighbors = List<Point>();
     for (var point in possibleNeighbors) {
       if (_isValidPointPath(point)) {
