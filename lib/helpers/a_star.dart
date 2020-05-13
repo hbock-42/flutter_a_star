@@ -34,13 +34,13 @@ class AStar {
       openSet.remove(current);
       List<Point> neighbors = _getNeighbors(current);
       for (var neighbor in neighbors) {
-        var tentative_gScore = gScores[current] + 1;
+        var tentativeGScore = gScores[current] + 1;
         if (!gScores.containsKey(neighbor)) {
           gScores[neighbor] = double.maxFinite;
         }
-        if (tentative_gScore < gScores[neighbor]) {
+        if (tentativeGScore < gScores[neighbor]) {
           cameFrom[neighbor] = current;
-          gScores[neighbor] = tentative_gScore;
+          gScores[neighbor] = tentativeGScore;
           fScores[neighbor] = gScores[neighbor] + minCostToEnd(neighbor);
           if (!openSet.contains(neighbor)) {
             openSet.add(neighbor);
@@ -106,5 +106,5 @@ class AStar {
   }
 
   double minCostToEnd(Point point) =>
-      (end.x - point.x).abs() + (end.y - point.y).abs();
+      (end.x - point.x).abs().toDouble() + (end.y - point.y).abs().toDouble();
 }

@@ -46,12 +46,15 @@ class _BoardWidgetState extends State<BoardWidget> {
         if (start == null) {
           setState(() => start = boardTile);
         } else {
-          setState(() => end = boardTile);
-          var astar = AStar(
-              board: widget.board, start: start.position, end: end.position);
-          path = astar.calculatePath();
-          start = null;
-          end = null;
+          setState(() {
+            end = boardTile;
+            var astar = AStar(
+                board: widget.board, start: start.position, end: end.position);
+            path = astar.calculatePath();
+            print("path len = " + path.length.toString());
+            start = null;
+            end = null;
+          });
         }
       },
       child: Container(
