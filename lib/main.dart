@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_start/models/board.dart';
+import 'package:flutter_a_start/widgets/board_widget.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,6 +32,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return BoardWidget(
+      board: Board.random(30, 25, 0.2),
+    );
   }
 }
