@@ -4,16 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_a_start/models/board.dart';
 import 'package:flutter_a_start/models/board_tile.dart';
 
-class BoardWidget extends StatelessWidget {
+class BoardWidget extends StatefulWidget {
   final Board board;
 
   const BoardWidget({Key key, @required this.board}) : super(key: key);
 
   @override
+  _BoardWidgetState createState() => _BoardWidgetState();
+}
+
+class _BoardWidgetState extends State<BoardWidget> {
+  BoardTile start;
+  BoardTile end;
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    var tileWidth = size.width / board.lines?.first?.length;
-    var tileHeight = size.height / board.lines?.length;
+    var tileWidth = size.width / widget.board.lines?.first?.length;
+    var tileHeight = size.height / widget.board.lines?.length;
     var tileSize = min(tileWidth, tileHeight);
     return Container(
       padding: MediaQuery.of(context).padding,
@@ -22,20 +30,35 @@ class BoardWidget extends StatelessWidget {
   }
 
   Widget buildTile(BoardTile boardTile, double tileSize) {
-    return Container(
-      width: tileSize,
-      height: tileSize,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.black,
-          width: 1,
-          style: BorderStyle.solid,
-        ),
-      ),
+    Color tileColor =
+        boardTile.type == TileType.wall ? Colors.grey : Colors.transparent;
+    if (boardTile == start) {
+      tileColor = Colors.green;
+    } else if (boardTile == end) {
+      tileColor = Colors.red;
+    }
+    return GestureDetector(
+      onTap: () {
+        if (start == null) {
+          setState(() => start = boardTile);
+        } else {
+          setState(() => end = boardTile);
+        }
+      },
       child: Container(
-        color:
-            boardTile.type == TileType.wall ? Colors.grey : Colors.transparent,
+        width: tileSize,
+        height: tileSize,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            color: Colors.black,
+            width: 1,
+            style: BorderStyle.solid,
+          ),
+        ),
+        child: Container(
+          color: tileColor,
+        ),
       ),
     );
   }
@@ -48,7 +71,7 @@ class BoardWidget extends StatelessWidget {
 
   Widget buildBoard(double tileSize) {
     List<Widget> rows = List<Widget>();
-    board.lines.forEach((row) => rows.add(buildRow(row, tileSize)));
+    widget.board.lines.forEach((row) => rows.add(buildRow(row, tileSize)));
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: rows);
   }
 }

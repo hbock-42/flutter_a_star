@@ -12,4 +12,11 @@ class BoardTile {
   final TileType type;
 
   const BoardTile({@required this.position, @required this.type});
+
+  @override
+  operator ==(other) =>
+      other is BoardTile && position == other.position && type == other.type;
+
+  @override
+  String toString() => 'board tile at $position of type $type';
 }
