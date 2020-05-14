@@ -56,7 +56,7 @@ class _BoardWidgetState extends State<BoardWidget> {
             path = astar.calculatePath();
             print("path len = " + path.length.toString());
             start = null;
-            // end = null;
+            end = null;
           });
         }
       },

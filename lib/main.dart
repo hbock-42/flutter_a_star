@@ -32,8 +32,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    Board.parseRow("##### ##   #", 2);
     return BoardWidget(
-      board: Board.random(30, 25, 0.2),
+      board: Board.random(
+        30,
+        25,
+        0.2,
+        hasHorizontalTunnel: true,
+        hasVerticalTunnel: true,
+      ),
     );
   }
 }
