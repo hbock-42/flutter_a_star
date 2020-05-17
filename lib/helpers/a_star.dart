@@ -32,8 +32,6 @@ class AStar {
   }
 
   List<Point> calculatePath() {
-    print("start:$start");
-    print("end:$end");
     rand = Random.secure();
     Set<Point> openSet = Set<Point>();
     openSet.add(start);
@@ -48,7 +46,6 @@ class AStar {
 
     while (openSet.length > 0) {
       Point<num> current = getPointWithLowestFscore(openSet, fScores);
-      print(cameFrom);
       if (current == end) {
         return _reconstructPath(cameFrom, current);
       }

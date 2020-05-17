@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_start/helpers/hungarian_algorithm.dart';
 import 'package:flutter_a_start/models/board.dart';
 import 'package:flutter_a_start/widgets/board_widget.dart';
 
@@ -32,7 +33,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    Board.parseRow("##### ##   #", 2);
     return BoardWidget(
       board: Board.random(
         30,
@@ -41,6 +41,8 @@ class _MyHomePageState extends State<MyHomePage> {
         hasHorizontalTunnel: true,
         hasVerticalTunnel: true,
       ),
+      numberOfStart: 4,
+      numberOfEnd: 3,
     );
   }
 }

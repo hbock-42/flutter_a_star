@@ -1,23 +1,31 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_a_start/helpers/a_star.dart';
+import 'package:flutter_a_start/helpers/optimal_paths.dart';
 import 'package:flutter_a_start/models/board.dart';
 import 'package:flutter_a_start/models/board_tile.dart';
 
 class BoardWidget extends StatefulWidget {
+  final int numberOfStart;
+  final int numberOfEnd;
   final Board board;
 
-  const BoardWidget({Key key, @required this.board}) : super(key: key);
+  const BoardWidget({
+    Key key,
+    @required this.board,
+    @required this.numberOfStart,
+    @required this.numberOfEnd,
+  }) : super(key: key);
 
   @override
   _BoardWidgetState createState() => _BoardWidgetState();
 }
 
 class _BoardWidgetState extends State<BoardWidget> {
-  BoardTile start;
-  BoardTile end;
-  List<Point> path = List<Point>();
+  List<BoardTile> starts = List<BoardTile>();
+  List<BoardTile> ends = List<BoardTile>();
+  List<List<Point>> paths = List<List<Point>>();
+  bool shouldReset = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,31 +40,51 @@ class _BoardWidgetState extends State<BoardWidget> {
   }
 
   Widget buildTile(BoardTile boardTile, double tileSize) {
+    List<Point> flattenedPaths = paths.expand((i) => i).toList();
     Color tileColor =
         boardTile.type == TileType.wall ? Colors.grey : Colors.transparent;
-    if (boardTile == start) {
+    if (starts.contains(boardTile)) {
       tileColor = Colors.green;
-    } else if (boardTile == end) {
+    } else if (ends.contains(boardTile)) {
       tileColor = Colors.red;
-    } else if (path.contains(boardTile.position)) {
+    } else if (flattenedPaths.contains(boardTile.position)) {
       tileColor = Colors.blue;
     }
     return GestureDetector(
       onTap: () {
-        if (start == null) {
+        if (starts.length < widget.numberOfStart) {
           setState(() {
-            start = boardTile;
-            path = List<Point>();
+            starts.add(boardTile);
+            paths.add(List<Point>());
+          });
+        } else if (ends.length < widget.numberOfEnd) {
+          setState(() => ends.add(boardTile));
+        } else if (!shouldReset && ends.length == widget.numberOfEnd) {
+          setState(() {
+            var startsPosition = List<Point>();
+            starts.forEach((elem) => startsPosition.add(elem.position));
+            var endsPosition = List<Point>();
+            ends.forEach((elem) => endsPosition.add(elem.position));
+            var optimalPathInstance = OptimalPath(
+                board: widget.board,
+                starts: startsPosition,
+                ends: endsPosition);
+            paths = optimalPathInstance.computePaths();
+            // for (var i = 0; i < widget.numberOfPath; i++) {
+            //   var astar = AStar(
+            //       board: widget.board,
+            //       start: starts[i].position,
+            //       end: ends[i].position);
+            //   paths[i] = astar.calculatePath();
+            // }
+            shouldReset = true;
           });
         } else {
           setState(() {
-            end = boardTile;
-            var astar = AStar(
-                board: widget.board, start: start.position, end: end.position);
-            path = astar.calculatePath();
-            print("path len = " + path.length.toString());
-            start = null;
-            end = null;
+            shouldReset = false;
+            starts.clear();
+            ends.clear();
+            paths.clear();
           });
         }
       },
