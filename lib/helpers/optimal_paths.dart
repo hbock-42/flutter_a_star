@@ -5,6 +5,7 @@ import 'package:flutter_a_start/helpers/hungarian_algorithm.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_a_start/models/board.dart';
 import 'package:flutter_a_start/models/pac.dart';
+import 'package:flutter_a_start/helpers/list_extension.dart';
 
 class OptimalPath {
   final Board board;
@@ -24,12 +25,20 @@ class OptimalPath {
 
   List<List<Point>> computePaths() {
     var paths = List<List<Point>>();
-    var costs = _computeCosts();
+    List<List<int>> costs = _computeCosts();
+    if (costs.length != costs.first.length) {
+      costs = costs.squareArray();
+    }
+    print('squared ok');
     var result = HungarianAlgorithm.findAssignments(costs);
+    print('hungarian ok');
 
     for (int i = 0; i < result.length; i++) {
-      paths.add(_paths[result[i]][i]);
+      if (result[i] < costs.length) {
+        paths.add(_paths[i][result[i]]);
+      }
     }
+    print('path ok');
     return paths;
   }
 
