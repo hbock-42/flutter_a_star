@@ -26,35 +26,33 @@ class OptimalPath {
   List<List<Point>> computePaths() {
     var paths = List<List<Point>>();
     List<List<int>> costs = _computeCosts();
+
     if (costs.length != costs.first.length) {
       costs = costs.squareArray();
     }
-    print('squared ok');
     var result = HungarianAlgorithm.findAssignments(costs);
-    print('hungarian ok');
 
-    for (int i = 0; i < result.length; i++) {
-      if (result[i] < costs.length) {
+    for (int i = 0; i < starts.length; i++) {
+      if (result[i] < ends.length) {
         paths.add(_paths[i][result[i]]);
       }
     }
-    print('path ok');
     return paths;
   }
 
   List<List<int>> _computeCosts() {
     var costs = List<List<int>>.generate(
-        ends.length, (i) => List<int>(starts.length),
+        starts.length, (i) => List<int>(ends.length),
         growable: false);
     _paths = List<List<List<Point>>>.generate(
-        ends.length, (i) => List<List<Point>>(starts.length),
+        starts.length, (i) => List<List<Point>>(ends.length),
         growable: false);
-    for (var h = 0; h < ends.length; h++) {
-      for (var w = 0; w < starts.length; w++) {
+    for (var h = 0; h < starts.length; h++) {
+      for (var w = 0; w < ends.length; w++) {
         var astar = AStar(
           board: board,
-          start: starts[w],
-          end: ends[h],
+          start: starts[h],
+          end: ends[w],
           allies: allies,
           ennemies: ennemies,
         );
