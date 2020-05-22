@@ -69,14 +69,12 @@ class _BoardWidgetState extends State<BoardWidget> {
                 board: widget.board,
                 starts: startsPosition,
                 ends: endsPosition);
+            print('starts: ${startsPosition}');
+            print('ends: ${endsPosition}');
+            print(
+                "lol: " + optimalPathInstance.computeNaiveTargets().toString());
             paths = optimalPathInstance.computePaths();
-            // for (var i = 0; i < widget.numberOfPath; i++) {
-            //   var astar = AStar(
-            //       board: widget.board,
-            //       start: starts[i].position,
-            //       end: ends[i].position);
-            //   paths[i] = astar.calculatePath();
-            // }
+            paths.forEach((path) => print(path.length));
             shouldReset = true;
           });
         } else {
@@ -118,3 +116,5 @@ class _BoardWidgetState extends State<BoardWidget> {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: rows);
   }
 }
+
+// start (23,15) end(11,3)

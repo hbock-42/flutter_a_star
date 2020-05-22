@@ -41,8 +41,8 @@ class _MyHomePageState extends State<MyHomePage> {
         hasHorizontalTunnel: true,
         hasVerticalTunnel: true,
       ),
-      numberOfStart: 3,
-      numberOfEnd: 4,
+      numberOfStart: 1,
+      numberOfEnd: 2,
     );
   }
 }

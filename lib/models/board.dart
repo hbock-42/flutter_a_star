@@ -45,7 +45,6 @@ class Board {
   static List<BoardTile> parseRow(String row, int lineNumber) {
     List<BoardTile> line = List<BoardTile>();
     for (var i = 0; i < row.length; i++) {
-      print(row[i]);
       TileType type;
       if (row[i] == "#") {
         type = TileType.wall;
@@ -93,8 +92,6 @@ class Board {
         }
       });
     });
-    print("has vertical tunnel:$hasVerticalTunnel");
-    print("has horizontal tunnel:$hasHorizontalTunnel");
   }
 
   TileType _createTileType(
